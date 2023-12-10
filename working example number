@@ -1,0 +1,21 @@
+extern crate winapi;
+
+use std::io::Write;
+use std::time::Duration;
+use std::thread::sleep;
+use winapi::um::winuser::GetAsyncKeyState;
+
+fn main() {
+    loop {
+        for i in 0..256 {
+            unsafe {
+                // If the most significant bit is set, the key is down
+                if GetAsyncKeyState(i) & (0x8000u16 as i16) != 0 {
+                    println!("Key {} is pressed", i);
+                    std::io::stdout().flush().unwrap();
+                }
+            }
+        }
+        sleep(Duration::from_millis(100));
+    }
+}
